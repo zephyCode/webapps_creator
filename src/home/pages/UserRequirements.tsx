@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react"
 
 
@@ -21,11 +22,24 @@ export default function UserRequirements() {
         }))
     }
 
-    const onSubmitHandler = () => {
+    const onSubmitHandler = async () => {
         if(!formValues.name.isValid || !formValues.tabsName.isValid || !formValues.selectedColor.isValid || !formValues.unselectedColor.isValid) {
             return;
         }
-        console.log(formValues);
+        const component = {
+            name: formValues.name.value,
+            tabsName: formValues.tabsName.value,
+            selectedColor: formValues.selectedColor.value,
+            unselectedColor: formValues.unselectedColor.value
+        }
+        await axios.post(
+            'http://localhost:8081/api/user-requirements', 
+            {component: component}
+        ).then((response) => {
+            console.log('Response: ' + JSON.stringify(response.data));
+        }).catch((error) => {
+            console.log('Error: ' + error);
+        });
     }
 
   return (
